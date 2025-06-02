@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Current Location</title>
+</head>
+<body>
+    <h1>Get Current Location</h1>
+    <button onclick="getCurrentLocation()">Get Location</button>
+    <p id="status"></p>
+
+    <script>
+        async function getCurrentLocation() {
+            const status = document.getElementById("status");
+            status.textContent = "Getting location...";
+
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    status.textContent = "Geolocation is not supported by your browser.";
+                    reject("Geolocation not supported");
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    status.textContent = Location: Latitude: ${latitude}, Longitude: ${longitude};
+                    console.log(Current Location: Latitude: ${latitude}, Longitude: ${longitude});
+                    resolve({ latitude, longitude });
+                }, (error) => {
+                    status.textContent = ❌ Error getting location: ${error.message};
+                    console.error(Error getting location: ${error.message});
+                    reject(error);
+                });
+            });
+        }
+
+        // Example usage
+        document.querySelector("button").addEventListener("click", () => {
+            getCurrentLocation()
+                .then(location => {
+                    console.log(Coordinates: ${JSON.stringify(location)});
+                })
+                .catch(error => {
+                    console.error(Failed to get location: ${error});
+                });
+        });
+    </script>
+</body>
+</html>
